@@ -1,7 +1,5 @@
-q = [0;0;0;0];
-qd = [0;0;0;0];
-qdd = [0;0;0;0];
 rho = [1;1;1;1];
+N = numel(rho);
 d1 = 1.5;
 a1 = 0.85;
 d3 = 1;
@@ -40,26 +38,24 @@ cm      = [    -xc1    -xc2    -xc3    -xc4    ;
                 0       zc2     0       0       ]; 
 I = cat(3,cat(3,cat(3,I1,I2),I3),I4);
 g = [0;0;-9.80655];
-% base  <- link1
-% link1 <- link2
-% link2 <- link3
-% link2 <- link4
+% base(0) <- link1
+% link1   <- link2
+% link2   <- link3
+% link2   <- link4
 
+parent_idx = [0 1 2 2];
+q = zeros(4,1);
+qd = zeros(4,1);
+qdd = zeros(4,1);
+q_0 = zeros(4,1);
+qd_0 = zeros(4,1);
 
-N = 4;
-data = cell(1,N);
-IDs = {'link1','link2','link3','link4'};
-
-tic;
-for k = 1:N,
-    data{k} = LinkData(IDs{k},q(k),qd(k),qdd(k),rho(k),DH_p(k,:),DH_c(k,:),m(k),cm(:,k),I(:,:,k));
-end
-
-base = Link(g);
-link1 = Link(base,'link1',data{1});
-link2 = Link(link1,'link2',data{2});
-link3 = Link(link2,'link3',data{3});
-link4 = Link(link2,'link4',data{4});
-base.forwardKinematics;
-base.inverseDynamics;
-toc
+test_robot = OpenKinematicChain('Test_Robot',parent_idx,rho,DH_p,DH_c,m,cm,I,g);
+%% Forward Kinemaitcs
+test_robot.forwardKinematics(q,qd,qdd);
+%% Inverse Dynamics
+u = test_robot.inverseDynamics(q,qd,qdd);
+%% Forward Dynamics
+qdd = test_robot.forwardDynamics(q,qd,u);
+%% SimMechanics Model Generation
+modelName = test_robot.generateSimMechanicsModel(q_0,qd_0);
