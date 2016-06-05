@@ -44,11 +44,11 @@ g = [0;0;-9.80655];
 % link2   <- link4
 
 parent_idx = [0 1 2 2];
-q = zeros(4,1);
-qd = zeros(4,1);
-qdd = zeros(4,1);
-q_0 = zeros(4,1);
-qd_0 = zeros(4,1);
+q = zeros(N,1);
+qd = zeros(N,1);
+qdd = zeros(N,1);
+q_0 = zeros(N,1);
+qd_0 = zeros(N,1);
 
 test_robot = OpenKinematicChain('Test_Robot',parent_idx,rho,DH_p,DH_c,m,cm,I,g);
 %% Forward Kinemaitcs
