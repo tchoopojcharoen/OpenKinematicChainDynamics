@@ -1,3 +1,5 @@
+%% move the cursor to a section and press ctrl+enter to run that section alone
+
 rho = [1;1;1;1];
 N = numel(rho);
 d1 = 1.5;
@@ -59,3 +61,9 @@ u = test_robot.inverseDynamics(q,qd,qdd);
 qdd = test_robot.forwardDynamics(q,qd,u);
 %% SimMechanics Model Generation
 modelName = test_robot.generateSimMechanicsModel(q_0,qd_0);
+%% Controller Generation and Closed Loop Control Simulation
+K_0 = 100*eye(N);
+K_1 = 50*eye(N);
+t_max = 10;
+controllerName = test_robot.generateInverseDynamicsController(K_0,K_1);
+[controlledSystem,t,q,qd,qdd,u] = test_robot.simulate(q_0,qd_0,controllerName,'ReferenceTrajectoryExample',t_max);

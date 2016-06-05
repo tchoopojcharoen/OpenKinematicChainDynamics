@@ -25,13 +25,13 @@ set_param([sys '/qdd'],'Value',['[' num2str(qdd',pre) ']''']);
 add_block('simulink/Commonly Used Blocks/Out1',[sys '/u']);
 
 add_block('built-in/Demux',[sys '/qDemux']);
-set_param('testModel/qDemux','Outputs',num2str(N));
+set_param([sys '/qDemux'],'Outputs',num2str(N));
 add_block('built-in/Demux',[sys '/qdDemux']);
-set_param('testModel/qdDemux','Outputs',num2str(N));
+set_param([sys '/qdDemux'],'Outputs',num2str(N));
 add_block('built-in/Demux',[sys '/qddDemux']);
-set_param('testModel/qddDemux','Outputs',num2str(N));
+set_param([sys '/qddDemux'],'Outputs',num2str(N));
 add_block('built-in/Mux',[sys '/uMux']);
-set_param('testModel/uMux','Inputs',num2str(N));
+set_param([sys '/uMux'],'Inputs',num2str(N));
 
 add_line(sys,'q/1','qDemux/1');
 add_line(sys,'qd/1','qdDemux/1');
